@@ -1,0 +1,18 @@
+======================================================================G A M E H U B - APACHE URL REWRITE RULES======================================================================This file enables "pretty" URLs like /game/some-game and protects files.It must be placed in the main directory of your website.<IfModule mod_rewrite.c># Turn on the URL rewriting engineRewriteEngine On# Set the base path for the rewrite rules.
+# If your site is in a subfolder (e.g., yoursite.com/games/), change this to /games/
+RewriteBase /
+
+# Rule to block direct browser access to sensitive files.
+RewriteRule ^(database\.json|config\.php)$ - [F,L]
+
+# This rule stops rewriting for the /actions/ folder to let forms submit directly.
+RewriteRule ^actions/ - [L]
+
+# These two lines prevent rewriting for URLs that point to actual files or directories.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# This is the main rule for all your pages.
+# It takes any URL that hasn't been handled yet and sends it to index.php.
+RewriteRule ^(.*)$ index.php?path=$1 [L,QSA]
+</IfModule>
